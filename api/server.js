@@ -13,11 +13,26 @@ const db = require("../data/dbConfig.js");
 server.use(express.json());
 server.use(cors);
 server.use(helmet);
-server.use("/account", accountRouter);
+server.use(logger);
+server.use("/api/account", accountRouter);
 
 // Flesh out a dummy API
 server.get("/", (req, res) => {
   res.send(`<h2>Building accounts endpoint!</h2>`);
 });
 
+// custom middleware
+function logger(req, res, next) {
+  console.log(
+    `[${new Date().toISOString()}] ${req.method} ${req.url} from ${req.get(
+      "Origin"
+    )}`
+  );
+  next();
+}
+
+// If the API is invalid
+server.get("*", (req, res) => {
+  res.status(404).json({ message: `Not found, sorry about that` });
+});
 module.exports = server;
