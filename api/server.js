@@ -11,8 +11,8 @@ const accountRouter = require("../accounts/accountRouter");
 
 // Here, i am making use of the middleware
 server.use(express.json());
-server.use(cors);
-server.use(helmet);
+server.use(cors());
+server.use(helmet());
 server.use(logger);
 server.use("/account", accountRouter);
 

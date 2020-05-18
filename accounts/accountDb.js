@@ -18,3 +18,5 @@ function getAccountById(id) {
   // I did the equivalent of SELECT * FROM accounts WHERE id=id
   return db("accounts").where({ id });
 }
+
+
