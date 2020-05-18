@@ -38,6 +38,33 @@ router.post("/", validateAccount, (req, res) => {
     });
 });
 
+// Endpoint for updating an account
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const replacementAccount = req.body;
+  accounts
+    .updateAccount(id, replacementAccount)
+    .then((account) => {
+      res.status(200).json(account);
+    })
+    .catch((error) => {
+      console.log(replacementAccount);
+      res.status(500).json({ message: error.message, stack: error.stack });
+    });
+});
+
+router.delete("/:id", (req, res) => {
+  // We get the id
+  const { id } = req.params;
+  accounts
+    .deleteAccount(id)
+    .then((account) => {
+      res.status(200).json({ message: `Deleted successfully` });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: error.message, stack: error.stack });
+    });
+});
 // Middleware here
 function validateAccountId(req, res, next) {
   // The id comes from req.params
