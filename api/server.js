@@ -7,14 +7,14 @@ const server = express();
 // Link the server and the router so that the endpoints can be accessed
 const accountRouter = require("../accounts/accountRouter");
 
-const db = require("../data/dbConfig.js");
+// const db = require("../data/dbConfig.js");
 
 // Here, i am making use of the middleware
 server.use(express.json());
 server.use(cors);
 server.use(helmet);
 server.use(logger);
-server.use("/api/account", accountRouter);
+server.use("/account", accountRouter);
 
 // Flesh out a dummy API
 server.get("/", (req, res) => {
@@ -35,4 +35,6 @@ function logger(req, res, next) {
 server.get("*", (req, res) => {
   res.status(404).json({ message: `Not found, sorry about that` });
 });
+
+// export the server to another file
 module.exports = server;
