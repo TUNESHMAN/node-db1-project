@@ -21,8 +21,21 @@ router.get("/", (req, res) => {
 });
 
 //  Endpoint to get server by ID
-router.get("/:id", validateAccountId, (req, res) => {
-  // The id will come from params
+router.get("/:id", validateAccountId, (req, res) => {});
+
+// Endpoint to add an account
+router.post("/", validateAccount, (req, res) => {
+  const newAccount = req.body;
+  accounts
+    .postAccount(newAccount)
+    .then((account) => {
+      res.status(201).json({
+        message: `Account has been added successfully`,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: error.message, stack: error.stack });
+    });
 });
 
 // Middleware here
@@ -44,5 +57,19 @@ function validateAccountId(req, res, next) {
       res.status(500).json({ message: `error.message`, stack: error.stack });
     });
 }
+
+function validateAccount(req, res, next) {
+  const NewAccount = req.body;
+  if (Object.keys(NewAccount).length === 0) {
+    res.status(400).json({ message: `Please add the account details` });
+  } else if (!NewAccount.name) {
+    res.status(400).json({ message: `You have not named this account` });
+  } else if (!NewAccount.budget) {
+    res.status(400).json({ message: `Please input account budget` });
+  } else {
+    next();
+  }
+}
+
 // I exposed the router to the outer world
 module.exports = router;
